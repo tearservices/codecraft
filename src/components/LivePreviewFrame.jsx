@@ -23,11 +23,15 @@ export default function LivePreviewFrame({ html = '', css = '', js = '', height 
 </html>`;
 
   return (
-    <iframe
-      title="preview"
-      srcDoc={srcDoc}
-      sandbox="allow-scripts"
-      style={{ width: '100%', height, border: '1px solid var(--border)', borderRadius: 8, background: '#fff' }}
-    />
+    <div className="live-preview">
+      <div className="live-preview-label">Live preview</div>
+      <iframe
+        title="preview"
+        srcDoc={srcDoc}
+        sandbox="allow-scripts"
+        className="live-preview-frame"
+        style={{ height }}
+      />
+    </div>
   );
 }

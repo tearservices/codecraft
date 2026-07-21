@@ -14,12 +14,9 @@ const LANGUAGE_EXTENSIONS = {
 export default function CodeEditor({ language, value, onChange, height = '260px' }) {
   const extensions = LANGUAGE_EXTENSIONS[language] || [];
   return (
-    <CodeMirror
-      value={value}
-      height={height}
-      theme="dark"
-      extensions={extensions}
-      onChange={(val) => onChange(val)}
-    />
+    <div className="code-editor">
+      <div className="code-editor-label">Editor</div>
+      <CodeMirror value={value} height={height} theme="dark" extensions={extensions} onChange={(val) => onChange(val)} />
+    </div>
   );
 }
