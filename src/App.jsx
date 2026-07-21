@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ProfileProvider, useProfile } from './context/ProfileContext.jsx';
 import { ProgressProvider } from './context/ProgressContext.jsx';
+import { ThemeProvider } from './context/ThemeContext.jsx';
 import Header from './components/Header.jsx';
 import ProfilePicker from './pages/ProfilePicker.jsx';
 import Landing from './pages/Landing.jsx';
@@ -54,12 +55,14 @@ function AppRoutes() {
 export default function App() {
   return (
     <ProfileProvider>
-      <div className="app-shell">
-        <Header />
-        <main className="app-main">
-          <AppRoutes />
-        </main>
-      </div>
+      <ThemeProvider>
+        <div className="app-shell">
+          <Header />
+          <main className="app-main">
+            <AppRoutes />
+          </main>
+        </div>
+      </ThemeProvider>
     </ProfileProvider>
   );
 }
