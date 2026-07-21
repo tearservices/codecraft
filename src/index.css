@@ -210,3 +210,107 @@ a {
   transform: translateX(18px);
   background: var(--success);
 }
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 16px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.lesson-path {
+  list-style: none;
+  margin: 32px auto;
+  padding: 0;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.lesson-path-item {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.lesson-path-item.pos-left {
+  align-items: flex-start;
+}
+
+.lesson-path-item.pos-right {
+  align-items: flex-end;
+}
+
+.lesson-path-item.pos-center {
+  align-items: center;
+}
+
+.lesson-path-connector {
+  width: 6px;
+  height: 28px;
+  background: var(--border);
+  border-radius: 3px;
+  margin: 0 auto;
+}
+
+.lesson-path-item.completed + .lesson-path-item .lesson-path-connector {
+  background: var(--accent, var(--success));
+}
+
+.lesson-path-node {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.1rem;
+  background: var(--border);
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.lesson-path-item.completed .lesson-path-node {
+  background: var(--accent, var(--success));
+  border-bottom: 4px solid color-mix(in srgb, var(--accent, var(--success)) 75%, black);
+  color: white;
+}
+
+.lesson-path-item.current .lesson-path-node {
+  width: 64px;
+  height: 64px;
+  background: var(--gold);
+  border: 4px solid var(--surface);
+  border-bottom: 4px solid var(--gold-dark);
+  color: #5c4400;
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.lesson-path-item.locked .lesson-path-node {
+  cursor: not-allowed;
+}
+
+.lesson-path-title {
+  margin-top: 6px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+.lesson-path-item.current .lesson-path-title {
+  opacity: 1;
+}
+
+.lesson-path-node:hover + .lesson-path-title,
+.lesson-path-node:focus-visible + .lesson-path-title {
+  opacity: 1;
+}
+
+.lesson-path-score {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
