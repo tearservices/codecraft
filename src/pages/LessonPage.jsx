@@ -70,10 +70,16 @@ export default function LessonPage() {
   }
 
   return (
-    <div className="lesson-page">
+    <div className="lesson-page" style={{ '--accent': course.accent }}>
       <Link to={`/course/${courseId}`} className="back-link">
         ← {course.title} lessons
       </Link>
+      <div className="lesson-header">
+        <span className="course-badge">{course.title}</span>
+        <span className="lesson-counter">
+          Lesson {lessonIndex + 1} of {course.lessons.length}
+        </span>
+      </div>
       <h1>{lesson.title}</h1>
 
       <div className="lesson-explanation">

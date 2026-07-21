@@ -12,17 +12,17 @@ export default function Header() {
         CodeCraft
       </Link>
       <div className="app-header-right">
-        <button
-          type="button"
-          className="theme-toggle"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-          aria-pressed={theme === 'dark'}
-        >
-          <span className="theme-toggle-thumb" />
-        </button>
         {activeProfile && (
           <>
+            <button
+              type="button"
+              className="theme-toggle"
+              onClick={toggleTheme}
+              aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+              aria-pressed={theme === 'dark'}
+            >
+              <span className="theme-toggle-thumb" />
+            </button>
             <span className="app-user">{activeProfile}</span>
             <button type="button" className="btn btn-ghost" onClick={switchUser}>
               Switch user

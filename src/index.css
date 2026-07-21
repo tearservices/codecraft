@@ -305,6 +305,12 @@ a {
   opacity: 1;
 }
 
+.lesson-path-cta {
+  margin-top: 8px;
+  padding: 8px 20px;
+  font-size: 0.85rem;
+}
+
 .lesson-path-node:hover + .lesson-path-title,
 .lesson-path-node:focus-visible + .lesson-path-title {
   opacity: 1;
@@ -626,6 +632,31 @@ a {
   height: 14px;
   background: #d0d0d0;
   vertical-align: middle;
+}
+
+.lesson-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.course-badge {
+  display: inline-block;
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.lesson-counter {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
 }
 
 .lesson-explanation {

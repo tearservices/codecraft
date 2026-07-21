@@ -73,4 +73,9 @@ describe('Quiz', () => {
     expect(onFinish).toHaveBeenCalledTimes(1);
     expect(onFinish).toHaveBeenCalledWith(1);
   });
+
+  it('renders nothing and does not crash when given an empty questions array', () => {
+    const { container } = render(<Quiz questions={[]} onFinish={() => {}} />);
+    expect(container).toBeEmptyDOMElement();
+  });
 });

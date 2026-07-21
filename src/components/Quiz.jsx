@@ -3,9 +3,13 @@ import { scoreQuiz } from '../lib/quiz.js';
 import Icon from './Icon.jsx';
 
 export default function Quiz({ questions, onFinish }) {
-  const [answers, setAnswers] = useState(() => Array(questions.length).fill(null));
+  const [answers, setAnswers] = useState(() => Array(questions?.length || 0).fill(null));
   const [current, setCurrent] = useState(0);
   const [finished, setFinished] = useState(false);
+
+  if (!questions || questions.length === 0) {
+    return null;
+  }
 
   const question = questions[current];
   const chosen = answers[current];

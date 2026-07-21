@@ -39,6 +39,14 @@ export default function LessonPath({ courseId, lessons, courseProgress }) {
               </Link>
             )}
             <span className="lesson-path-title">{lesson.title}</span>
+            {status === 'current' && (
+              <Link
+                to={`/course/${courseId}/lesson/${lesson.id}`}
+                className="btn btn-primary lesson-path-cta"
+              >
+                {lessonProgress ? 'Continue' : 'Start'}
+              </Link>
+            )}
             {lessonProgress?.quizScore != null && (
               <span className="lesson-path-score">
                 Quiz: {lessonProgress.quizScore}/{lesson.quiz.length}
