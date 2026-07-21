@@ -5,6 +5,7 @@ import Icon from './Icon.jsx';
 export default function Quiz({ questions, onFinish }) {
   const [answers, setAnswers] = useState(() => Array(questions.length).fill(null));
   const [current, setCurrent] = useState(0);
+  const [finished, setFinished] = useState(false);
 
   const question = questions[current];
   const chosen = answers[current];
@@ -22,7 +23,9 @@ export default function Quiz({ questions, onFinish }) {
   }
 
   function handleContinue() {
+    if (finished) return;
     if (isLast) {
+      setFinished(true);
       onFinish(scoreQuiz(questions, answers));
     } else {
       setCurrent((c) => c + 1);

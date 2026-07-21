@@ -56,4 +56,21 @@ describe('Quiz', () => {
     expect(onFinish).toHaveBeenCalledTimes(1);
     expect(onFinish).toHaveBeenCalledWith(1);
   });
+
+  it('prevents double-calling onFinish even if the final Continue/Got it button is clicked twice', async () => {
+    const user = userEvent.setup();
+    const onFinish = vi.fn();
+    render(<Quiz questions={questions} onFinish={onFinish} />);
+
+    await user.click(screen.getByRole('button', { name: '4' })); // correct
+    await user.click(screen.getByRole('button', { name: 'Continue' }));
+    await user.click(screen.getByRole('button', { name: 'Rome' })); // incorrect
+
+    const gotItButton = screen.getByRole('button', { name: 'Got it' });
+    await user.click(gotItButton); // first click
+    await user.click(gotItButton); // second click - should be ignored
+
+    expect(onFinish).toHaveBeenCalledTimes(1);
+    expect(onFinish).toHaveBeenCalledWith(1);
+  });
 });
