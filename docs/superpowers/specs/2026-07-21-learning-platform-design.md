@@ -14,6 +14,10 @@ comprehensive, self-contained courses:
    prototypes, classes, async, modules) with no DOM/browser dependency
 5. **Python**
 
+Access is gated by a lightweight **username-only profile** system (no
+password, no real auth — see "Profiles" below) so that progress can be
+saved per named user, e.g. on a shared computer.
+
 Each course has 15-18 lessons. Each lesson contains: a written explanation,
 a worked example, a live interactive coding exercise, and a short quiz.
 All progress (lesson completion, quiz scores, in-progress exercise code) is
@@ -28,11 +32,36 @@ account system.
   fetched from a CDN on first use per browser; everything else works
   fully offline after the initial `npm install`/build).
 
+## Profiles (username-only "login")
+
+Not real authentication — there is no password, no server, no session
+security. It exists purely to namespace saved progress by name.
+
+- On first visit (no active profile in `localStorage`), the user sees a
+  simple screen: enter a username, "Continue."
+- Uniqueness is checked only against other profile names already stored
+  in this browser's `localStorage` (there is no server to check
+  against). If taken, show an inline error and let them try another
+  name or select the existing profile instead (see below).
+- If profiles already exist in this browser, the screen instead offers:
+  pick one of the existing profile names to continue as that user, or
+  "New profile" to create another.
+- Once selected, the active profile name is stored (e.g. under
+  `webu:activeProfile`) and the app auto-continues to that profile's
+  content on every future visit — no re-entry needed.
+- A "Switch user" control (visible in the app header/footer) clears the
+  active-profile pointer and returns to the picker screen, without
+  deleting any profile's data.
+- Deleting a profile (and its saved progress) is available from the same
+  picker screen as a secondary action.
+
 ## Architecture
 
 - **React + Vite**, client-side only, static build output.
 - **React Router** (`BrowserRouter`) for navigation:
-  - `/` — landing page with course cards + progress bars
+  - `/` — landing page with course cards + progress bars (redirects to
+    the profile picker if no active profile is set)
+  - `/profile` — profile picker / creation screen
   - `/course/:courseId` — lesson list for a course
   - `/course/:courseId/lesson/:lessonId` — lesson content
 - **CodeMirror 6** for all code editor panels (syntax highlighting per
@@ -121,7 +150,14 @@ decorators; generators & iterators; context managers; common stdlib
 
 ## Persistence (localStorage)
 
-Single namespaced key `webu:progress` holding:
+Two top-level concerns:
+
+- `webu:profiles` — array of known profile names that exist in this
+  browser, e.g. `["sofia", "alex"]`.
+- `webu:activeProfile` — the currently active profile name (or absent,
+  meaning show the picker).
+- `webu:progress:<profileName>` — one namespaced key per profile, holding
+  that profile's progress:
 
 ```js
 {
@@ -144,9 +180,13 @@ Single namespaced key `webu:progress` holding:
 
 - Written on: exercise code change (debounced ~500ms), quiz submit,
   lesson marked complete.
-- Read once on app load into React context; all components read/write
+- Read on app load (and whenever the active profile changes) into React
+  context, keyed by the current active profile; all components read/write
   through a `useProgress()` hook backed by that context.
-- A "Reset progress" control (in a settings/footer area) clears the key.
+- A "Reset progress" control (in a settings/footer area) clears only the
+  active profile's `webu:progress:<profileName>` key.
+- Deleting a profile (from the picker screen) removes its name from
+  `webu:profiles` and deletes its `webu:progress:<profileName>` key.
 
 ## UI / pages
 
@@ -163,6 +203,10 @@ Single namespaced key `webu:progress` holding:
 This is UI-heavy and behavior (not just types) matters, so verification
 is manual-in-browser rather than automated tests:
 
+- Confirm the profile flow: creating a new profile, rejecting a
+  duplicate username, auto-continuing to the same profile on reload,
+  switching to a second profile with independent progress, and deleting
+  a profile.
 - Run the Vite dev server and, for each of the 5 execution types
   (HTML preview, CSS preview, Web JS preview, Core JS worker execution,
   Python/Pyodide worker execution), complete one full lesson: edit the
