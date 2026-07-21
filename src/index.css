@@ -424,3 +424,121 @@ a {
   font-family: var(--font-body);
   font-size: 1rem;
 }
+
+.quiz {
+  position: relative;
+}
+
+.quiz-question-text {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 12px;
+}
+
+.quiz-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quiz-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: left;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-bottom: 4px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.quiz-choice:disabled {
+  cursor: default;
+}
+
+.quiz-choice.correct {
+  border-color: var(--success);
+  border-bottom-color: var(--success-dark);
+  background: var(--success-tint);
+  color: var(--success-dark);
+}
+
+.quiz-choice.incorrect {
+  border-color: var(--danger);
+  border-bottom-color: var(--danger-dark);
+  background: var(--danger-tint);
+  color: var(--danger-dark);
+}
+
+.quiz-choice.correct-answer {
+  border-color: var(--success);
+  background: var(--success-tint);
+  color: var(--success-dark);
+  opacity: 0.75;
+}
+
+.quiz-banner {
+  margin-top: 16px;
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 800;
+}
+
+.quiz-banner.correct {
+  background: var(--success-tint);
+  border: 2px solid var(--success);
+  color: var(--success-dark);
+}
+
+.quiz-banner.incorrect {
+  background: var(--danger-tint);
+  border: 2px solid var(--danger);
+  color: var(--danger-dark);
+}
+
+.quiz-banner-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.quiz-banner-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.quiz-banner.correct .quiz-banner-icon {
+  background: var(--success);
+}
+
+.quiz-banner.incorrect .quiz-banner-icon {
+  background: var(--danger);
+}
+
+/* The banner's Continue/Got it button always matches the banner's verdict
+   color (green/red), overriding the course-accent-colored .btn-primary
+   default — a right answer in the CSS course should not show a blue button. */
+.quiz-banner.correct .btn-primary {
+  background: var(--success);
+  border-color: var(--success);
+  border-bottom-color: var(--success-dark);
+}
+
+.quiz-banner.incorrect .btn-primary {
+  background: var(--danger);
+  border-color: var(--danger);
+  border-bottom-color: var(--danger-dark);
+}

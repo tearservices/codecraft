@@ -1,74 +1,75 @@
 import { useState } from 'react';
 import { scoreQuiz } from '../lib/quiz.js';
+import Icon from './Icon.jsx';
 
-export default function Quiz({ questions, onSubmit }) {
+export default function Quiz({ questions, onFinish }) {
   const [answers, setAnswers] = useState(() => Array(questions.length).fill(null));
-  const [submitted, setSubmitted] = useState(false);
+  const [current, setCurrent] = useState(0);
 
-  const allAnswered = answers.every((a) => a !== null);
+  const question = questions[current];
+  const chosen = answers[current];
+  const answered = chosen !== null;
+  const isCorrect = answered && chosen === question.correctIndex;
+  const isLast = current === questions.length - 1;
 
-  function selectAnswer(qIndex, choiceIndex) {
-    if (submitted) return;
+  function selectAnswer(choiceIndex) {
+    if (answered) return;
     setAnswers((prev) => {
       const next = [...prev];
-      next[qIndex] = choiceIndex;
+      next[current] = choiceIndex;
       return next;
     });
   }
 
-  function handleSubmit() {
-    const score = scoreQuiz(questions, answers);
-    setSubmitted(true);
-    onSubmit(score);
-  }
-
-  function retry() {
-    setAnswers(Array(questions.length).fill(null));
-    setSubmitted(false);
+  function handleContinue() {
+    if (isLast) {
+      onFinish(scoreQuiz(questions, answers));
+    } else {
+      setCurrent((c) => c + 1);
+    }
   }
 
   return (
     <div className="quiz">
-      {questions.map((q, qIndex) => (
-        <div className="quiz-question" key={qIndex}>
-          <p className="quiz-question-text">
-            {qIndex + 1}. {q.question}
-          </p>
-          <div className="quiz-choices">
-            {q.choices.map((choice, cIndex) => {
-              const isSelected = answers[qIndex] === cIndex;
-              const isCorrect = cIndex === q.correctIndex;
-              let stateClass = '';
-              if (submitted && isSelected && isCorrect) stateClass = 'correct';
-              else if (submitted && isSelected && !isCorrect) stateClass = 'incorrect';
-              else if (submitted && isCorrect) stateClass = 'correct-answer';
-              return (
-                <button
-                  key={cIndex}
-                  type="button"
-                  className={`quiz-choice ${isSelected ? 'selected' : ''} ${stateClass}`}
-                  onClick={() => selectAnswer(qIndex, cIndex)}
-                  disabled={submitted}
-                >
-                  {choice}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      ))}
+      <p className="label">
+        Question {current + 1} of {questions.length}
+      </p>
+      <p className="quiz-question-text">{question.question}</p>
+      <div className="quiz-choices">
+        {question.choices.map((choice, cIndex) => {
+          const isChoiceCorrect = cIndex === question.correctIndex;
+          const isChosen = chosen === cIndex;
+          let stateClass = '';
+          if (answered && isChosen && isChoiceCorrect) stateClass = 'correct';
+          else if (answered && isChosen && !isChoiceCorrect) stateClass = 'incorrect';
+          else if (answered && isChoiceCorrect) stateClass = 'correct-answer';
+          return (
+            <button
+              key={cIndex}
+              type="button"
+              className={`quiz-choice ${stateClass}`}
+              onClick={() => selectAnswer(cIndex)}
+              disabled={answered}
+            >
+              <span>{choice}</span>
+              {answered && (isChosen || isChoiceCorrect) && (
+                <Icon name={isChoiceCorrect ? 'check' : 'x'} size={16} />
+              )}
+            </button>
+          );
+        })}
+      </div>
 
-      {!submitted ? (
-        <button type="button" className="btn btn-primary" disabled={!allAnswered} onClick={handleSubmit}>
-          Submit quiz
-        </button>
-      ) : (
-        <div className="quiz-result">
-          <span>
-            Score: {scoreQuiz(questions, answers)} / {questions.length}
-          </span>
-          <button type="button" className="btn" onClick={retry}>
-            Retry
+      {answered && (
+        <div className={`quiz-banner ${isCorrect ? 'correct' : 'incorrect'}`}>
+          <div className="quiz-banner-message">
+            <span className="quiz-banner-icon">
+              <Icon name={isCorrect ? 'check' : 'x'} size={16} />
+            </span>
+            {isCorrect ? 'Nicely done!' : 'Not quite'}
+          </div>
+          <button type="button" className="btn btn-primary" onClick={handleContinue}>
+            {isCorrect ? 'Continue' : 'Got it'}
           </button>
         </div>
       )}
