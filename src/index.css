@@ -314,3 +314,58 @@ a {
   font-size: 0.75rem;
   color: var(--text-muted);
 }
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.course-card {
+  display: block;
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  border: 2px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: transform 0.1s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-2px);
+}
+
+.course-card h2 {
+  margin: 0 0 4px;
+  color: var(--accent);
+}
+
+.progress-bar {
+  height: 10px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent) 20%, var(--surface));
+  overflow: hidden;
+  margin: 8px 0 14px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.progress-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.course-card-cta {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  margin-top: 4px;
+}
+
+.reset-progress {
+  margin-top: 16px;
+}

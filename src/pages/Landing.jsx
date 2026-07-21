@@ -13,14 +13,21 @@ export default function Landing() {
           const { completed, total } = getCourseCompletion(course.id, course.lessons.length);
           const pct = total ? Math.round((completed / total) * 100) : 0;
           return (
-            <Link to={`/course/${course.id}`} className="course-card" key={course.id} style={{ '--accent': course.accent }}>
+            <Link
+              to={`/course/${course.id}`}
+              className="course-card"
+              key={course.id}
+              style={{ '--accent': course.accent }}
+            >
               <h2>{course.title}</h2>
-              <p>{course.description}</p>
+              <p className="progress-label">
+                {completed} / {total} lessons
+              </p>
               <div className="progress-bar">
                 <div className="progress-bar-fill" style={{ width: `${pct}%` }} />
               </div>
-              <span className="progress-label">
-                {completed} / {total} lessons
+              <span className="btn btn-primary course-card-cta">
+                {completed > 0 ? 'Continue' : 'Start'}
               </span>
             </Link>
           );
