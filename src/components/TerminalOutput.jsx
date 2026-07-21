@@ -36,7 +36,7 @@ export default function TerminalOutput({ username, command, output }) {
           </>
         )}
 
-        {output && !output.loading && (
+        {!output?.loading && (
           <div className="terminal-line">
             <span className="terminal-prompt">{user}@fedora</span>{' '}
             <span className="terminal-path">~</span>

@@ -6,13 +6,13 @@ import TerminalOutput from './TerminalOutput.jsx';
 describe('TerminalOutput', () => {
   it('shows the idle prompt with the given username and command before any run', () => {
     render(<TerminalOutput username="sofia" command="python3 exercise.py" output={null} />);
-    expect(screen.getByText('sofia@fedora')).toBeInTheDocument();
+    expect(screen.getAllByText('sofia@fedora')).toHaveLength(2);
     expect(screen.getByText('python3 exercise.py')).toBeInTheDocument();
   });
 
   it('falls back to "guest" when no username is given', () => {
     render(<TerminalOutput username={null} command="node exercise.js" output={null} />);
-    expect(screen.getByText('guest@fedora')).toBeInTheDocument();
+    expect(screen.getAllByText('guest@fedora')).toHaveLength(2);
   });
 
   it('renders log lines from a successful run', () => {
@@ -49,5 +49,12 @@ describe('TerminalOutput', () => {
       <TerminalOutput username="sofia" command="python3 exercise.py" output={{ loading: true }} />
     );
     expect(container.querySelectorAll('.terminal-cursor')).toHaveLength(0);
+  });
+
+  it('shows the idle cursor line before any run (output={null})', () => {
+    const { container } = render(
+      <TerminalOutput username="sofia" command="python3 exercise.py" output={null} />
+    );
+    expect(container.querySelectorAll('.terminal-cursor')).toHaveLength(1);
   });
 });
