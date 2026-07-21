@@ -11,24 +11,25 @@
     "verify-content": "node scripts/verify-content.mjs"
   },
   "dependencies": {
+    "@codemirror/lang-css": "^6.3.1",
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/lang-python": "^6.1.6",
+    "@fontsource/plus-jakarta-sans": "^5.3.0",
+    "@uiw/react-codemirror": "^4.23.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2",
     "react-markdown": "^9.0.1",
-    "@uiw/react-codemirror": "^4.23.6",
-    "@codemirror/lang-html": "^6.4.9",
-    "@codemirror/lang-css": "^6.3.1",
-    "@codemirror/lang-javascript": "^6.2.2",
-    "@codemirror/lang-python": "^6.1.6"
+    "react-router-dom": "^6.26.2"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.1",
-    "vite": "^5.4.8",
-    "vitest": "^2.1.1",
-    "jsdom": "^25.0.1",
-    "@testing-library/react": "^16.0.1",
     "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@vitejs/plugin-react": "^4.3.1",
     "css": "^3.0.0",
-    "pyodide": "^0.26.2"
+    "jsdom": "^25.0.1",
+    "pyodide": "^0.26.2",
+    "vite": "^5.4.8",
+    "vitest": "^2.1.1"
   }
 }
