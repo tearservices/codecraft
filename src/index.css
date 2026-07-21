@@ -627,3 +627,45 @@ a {
   background: #d0d0d0;
   vertical-align: middle;
 }
+
+.lesson-explanation {
+  margin: 16px 0;
+}
+
+.lesson-explanation :is(h1, h2, h3) {
+  margin-top: 24px;
+}
+
+.code-block {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  border: none;
+}
+
+section {
+  margin: 32px 0;
+}
+
+.exercise-panels {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.exercise-panels > * {
+  flex: 1;
+  min-width: 280px;
+}
+
+.worker-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

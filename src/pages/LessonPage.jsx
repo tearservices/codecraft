@@ -3,14 +3,16 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { getCourse, getLesson } from '../content/courses.js';
 import { useProgress } from '../context/ProgressContext.jsx';
+import { useProfile } from '../context/ProfileContext.jsx';
 import { useJsWorker, usePyWorker } from '../hooks/useCodeWorker.js';
 import CodeEditor from '../components/CodeEditor.jsx';
 import LivePreviewFrame from '../components/LivePreviewFrame.jsx';
+import TerminalOutput from '../components/TerminalOutput.jsx';
 import Quiz from '../components/Quiz.jsx';
 
 const PREVIEW_COURSES = new Set(['html', 'css', 'webjs']);
-const WORKER_LANGUAGE = { corejs: 'javascript', python: 'python' };
 const EDITOR_LANGUAGE = { html: 'html', css: 'css', webjs: 'javascript', corejs: 'javascript', python: 'python' };
+const WORKER_COMMAND = { corejs: 'node exercise.js', python: 'python3 exercise.py' };
 
 export default function LessonPage() {
   const { courseId, lessonId } = useParams();
@@ -18,6 +20,7 @@ export default function LessonPage() {
   const course = getCourse(courseId);
   const lesson = getLesson(courseId, lessonId);
   const { progress, saveExerciseCode, saveQuizScore, markLessonComplete } = useProgress();
+  const { activeProfile } = useProfile();
 
   const savedCode = progress.courses[courseId]?.lessons[lessonId]?.savedCode;
   const [code, setCode] = useState(savedCode || lesson?.exercise.starterCode || '');
@@ -56,11 +59,8 @@ export default function LessonPage() {
     setOutput(result);
   }
 
-  function handleQuizSubmit(score) {
+  function handleQuizFinish(score) {
     saveQuizScore(courseId, lessonId, score);
-  }
-
-  function handleComplete() {
     markLessonComplete(courseId, lessonId);
     if (nextLesson) {
       navigate(`/course/${courseId}/lesson/${nextLesson.id}`);
@@ -81,52 +81,42 @@ export default function LessonPage() {
       </div>
 
       <section>
-        <h2>Example</h2>
+        <p className="label">Example</p>
         <pre className="code-block">
           <code>{lesson.example.code}</code>
         </pre>
       </section>
 
       <section>
-        <h2>Try it</h2>
+        <p className="label">Your turn</p>
         <p className="muted">{lesson.exercise.instructions}</p>
-        <CodeEditor language={EDITOR_LANGUAGE[courseId]} value={code} onChange={setCode} />
+        <div className="exercise-panels">
+          <CodeEditor language={EDITOR_LANGUAGE[courseId]} value={code} onChange={setCode} />
 
-        {isPreviewCourse ? (
-          <LivePreviewFrame
-            html={courseId === 'html' ? code : lesson.exercise.previewHtml}
-            css={courseId === 'css' ? code : ''}
-            js={courseId === 'webjs' ? code : ''}
-          />
-        ) : (
-          <div className="worker-panel">
-            <button type="button" className="btn btn-primary" onClick={handleRun} disabled={output?.loading}>
-              {output?.loading ? 'Running…' : 'Run'}
-            </button>
-            {courseId === 'python' && output?.loading && (
-              <p className="muted">First run downloads the Python runtime, this can take a few seconds…</p>
-            )}
-            {output && !output.loading && (
-              <pre className={`code-output ${output.error ? 'has-error' : ''}`}>
-                {output.timedOut
-                  ? 'Timed out — your code may contain an infinite loop.'
-                  : [...(output.logs || []), output.error ? `ERROR: ${output.error}` : null]
-                      .filter(Boolean)
-                      .join('\n') || '(no output)'}
-              </pre>
-            )}
-          </div>
-        )}
+          {isPreviewCourse ? (
+            <LivePreviewFrame
+              html={courseId === 'html' ? code : lesson.exercise.previewHtml}
+              css={courseId === 'css' ? code : ''}
+              js={courseId === 'webjs' ? code : ''}
+            />
+          ) : (
+            <div className="worker-panel">
+              <button type="button" className="btn btn-primary" onClick={handleRun} disabled={output?.loading}>
+                {output?.loading ? 'Running…' : 'Run'}
+              </button>
+              {courseId === 'python' && output?.loading && (
+                <p className="muted">First run downloads the Python runtime, this can take a few seconds…</p>
+              )}
+              <TerminalOutput username={activeProfile} command={WORKER_COMMAND[courseId]} output={output} />
+            </div>
+          )}
+        </div>
       </section>
 
       <section>
-        <h2>Quiz</h2>
-        <Quiz key={lessonId} questions={lesson.quiz} onSubmit={handleQuizSubmit} />
+        <p className="label">Quick check</p>
+        <Quiz key={lessonId} questions={lesson.quiz} onFinish={handleQuizFinish} />
       </section>
-
-      <button type="button" className="btn btn-primary btn-complete" onClick={handleComplete}>
-        Mark complete{nextLesson ? ' & next lesson' : ''}
-      </button>
     </div>
   );
 }
